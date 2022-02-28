@@ -1,7 +1,7 @@
 # dolhpinetanks
 EENG350 SPR22
 
-devin e - localization \t
-travis a - computer vision \t
-yuxi w - simulation and control \t
+devin e - localization
+travis a - computer vision
+yuxi w - simulation and control
 alex m - system integration
