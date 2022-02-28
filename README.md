@@ -1,7 +1,7 @@
 # dolhpinetanks
-seed spr tweny too
+EENG350 SPR22
 
-devin e
-travis a
-yuxi w
-alex m
+devin e - localization \t
+travis a - computer vision \t
+yuxi w - simulation and control \t
+alex m - system integration
