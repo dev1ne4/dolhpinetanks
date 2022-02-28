@@ -1,5 +1,5 @@
 # dolhpinetanks
-EENG350 SPR22 \
+EENG350 SPR22
 
 The purpose of this repository is to allow code to be viewed freely by other \
 members as needed. Code created by each individual member are categorized \
