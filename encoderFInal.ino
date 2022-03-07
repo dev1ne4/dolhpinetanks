@@ -9,10 +9,10 @@
  */
 
 
-static int clkPin1 = 2;  //CLK to pin 2 YELLOW
+static int clkPin1 = 2;  //CLK to pin 2 YELLOW, LEFT MOTOR
 static int dtPin1 = 8;  //DT to pin 10 WHITE
 
-static int clkPin2 = 3, dtPin2 = 9;
+static int clkPin2 = 3, dtPin2 = 9; //YELLOW to 3, RIGHT MOTOR
 
 int mech2CurrentState = LOW, mech2LastState = mech2CurrentState;
 
