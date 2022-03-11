@@ -106,8 +106,8 @@ void rotate(double angle){
     digitalWrite(7, HIGH);
     digitalWrite(8, LOW);
     while(abs(TRAVEL2) < abs((intTRAVEL2+(int)desired))+(300)){
-        analogWrite(9,45);
-        analogWrite(10,55);
+        analogWrite(9,100);
+        analogWrite(10,110);
         //Serial.print(TRAVEL1); Serial.print("\t"); Serial.println(TRAVEL2);
       }
         analogWrite(9,0);
