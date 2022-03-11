@@ -89,7 +89,7 @@ void mechISR1(){ //clkPin ISR
 
 void loop() {
                         
-  rotate(-90);
+  rotate(90);
    
   Serial.print(TRAVEL1); Serial.print("\t"); Serial.println(TRAVEL2);
   
@@ -97,7 +97,7 @@ void loop() {
 
 void rotate(double angle){
   
-  double full = 4012.53;
+  double full = 5973.33;
   float desired = full*angle/360;
   int intTRAVEL2 = TRAVEL2;
 
@@ -105,10 +105,9 @@ void rotate(double angle){
     Serial.println(desired);
     digitalWrite(7, HIGH);
     digitalWrite(8, LOW);
-    while(abs(TRAVEL2) < abs((intTRAVEL2+(int)desired))+(300)){
+    while(abs(TRAVEL2) < (abs(intTRAVEL2 +(int)desired))-(200*abs(angle)/90)){
         analogWrite(9,100);
         analogWrite(10,110);
-        //Serial.print(TRAVEL1); Serial.print("\t"); Serial.println(TRAVEL2);
       }
         analogWrite(9,0);
         analogWrite(10,0);
@@ -120,9 +119,9 @@ void rotate(double angle){
     digitalWrite(7, LOW);
     digitalWrite(8, HIGH);
 
-        while(abs(TRAVEL2) < abs((intTRAVEL2+(int)desired))){
+        while(abs(TRAVEL2) < (abs(intTRAVEL2 +(int)desired))-(200*abs(angle)/90)){
         analogWrite(9,100);
-        analogWrite(10,100);
+        analogWrite(10,110);
       }
         analogWrite(9,0);
         analogWrite(10,0);
