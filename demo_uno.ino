@@ -46,15 +46,19 @@ void setup() {
   digitalWrite(4,HIGH);
 
                       
-  digitalWrite(7, HIGH); // left motor direction control, low meeans forward positive
+  digitalWrite(7, LOW); // left motor direction control, low meeans forward positive
  
-  digitalWrite(8, HIGH);  // right motor direction control, low means forward positive
+  digitalWrite(8, LOW);  // right motor direction control, low means forward positive
 
   Valeft=(Va+deltaVa)/2;
   Varight=(Va-deltaVa)/2;
 
   delay(500);
- 
+
+  rotate(190);
+  TRAVEL1 = 0; TRAVEL2 = 0;
+  delay(100);
+  forward(3.1);
 } 
 void mechISR1(){ //clkPin ISR
     cli();
@@ -87,13 +91,6 @@ void mechISR1(){ //clkPin ISR
     sei();
   }
 
-void loop() {
-                        
-  rotate(90);
-   
-  Serial.print(TRAVEL1); Serial.print("\t"); Serial.println(TRAVEL2);
-  
-}
 
 void rotate(double angle){
   
@@ -106,8 +103,8 @@ void rotate(double angle){
     digitalWrite(7, HIGH);
     digitalWrite(8, LOW);
     while(abs(TRAVEL2) < (abs(intTRAVEL2 +(int)desired))-(200*abs(angle)/90)){
-        analogWrite(9,100);
-        analogWrite(10,110);
+        analogWrite(9,53);
+        analogWrite(10,50);
       }
         analogWrite(9,0);
         analogWrite(10,0);
@@ -120,8 +117,8 @@ void rotate(double angle){
     digitalWrite(8, HIGH);
 
         while(abs(TRAVEL2) < (abs(intTRAVEL2 +(int)desired))-(200*abs(angle)/90)){
-        analogWrite(9,100);
-        analogWrite(10,110);
+        analogWrite(9,53);
+        analogWrite(10,50);
       }
         analogWrite(9,0);
         analogWrite(10,0);
@@ -130,3 +127,23 @@ void rotate(double angle){
     }
   
   }
+
+  void forward(float feet){
+        while(TRAVEL1 < feet*2032) {
+            analogWrite(9,95);
+            analogWrite(10,100);
+        
+        }
+        analogWrite(9,0);
+        analogWrite(10,0);
+
+    
+    }
+
+void loop() {
+                        
+  //rotate(90);
+  //forward(10);
+  //Serial.print(TRAVEL1); Serial.print("\t"); Serial.println(TRAVEL2);
+  
+}
