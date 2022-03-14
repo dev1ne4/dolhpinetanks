@@ -34,6 +34,7 @@ def cv_miniproject():
     ySize =768
     state = 0
     new_state = 0
+    prevang = 0
     camera = PiCamera(resolution=(xSize,ySize), framerate=30)
    
     camera.iso = 100
@@ -63,7 +64,7 @@ def cv_miniproject():
     # Our operations on the frame come here
         img2HSV = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
    
-        boundaries = [([100,150,0], [140,255,255])]
+        boundaries = [([88,150,50], [118,255,255])]
    
         for (lower,upper) in boundaries:
             lower = np.array(lower, dtype = "uint8")
@@ -84,8 +85,8 @@ def cv_miniproject():
         denom = opening.shape[1]/2
         
        
-        #x = round(tup2[1])
-        #y = round(tup2[0])
+        x = round(tup2[1])
+        y = round(tup2[0])
         #if (x == y == 0):
             #lcd.clear
             #lcd.message = ("object not found")
@@ -113,12 +114,14 @@ def cv_miniproject():
             #lcd.clear()
             #lcd.message = (str(display) +" degrees")
             #writeNumber(state)
-        angle = 27*((ratio)/(denom))
-        prevang = 0
+        angle = round(27*((ratio)/(denom)), 1)
         
-        if (angle != prevang):
+        if (x == y == 0 and angle != -27):
+            lcd.clear
+            lcd.message = ("object not found")
+        elif (angle != prevang):
             lcd.clear()
-            lcd.message = (str(angle) + " degrees")
+            lcd.message = (str(-angle) + " degrees")
         
         prevang = angle
 
@@ -131,7 +134,7 @@ def cv_miniproject():
     cap.release()
     cv.destroyAllWindows()
    
-    return values
+    #return values
 
 def writeNumber(value):
     bus.write_byte(address, value)
