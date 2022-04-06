@@ -1,15 +1,14 @@
-
 static int clkPin1 = 2;  //CLK to pin 2 YELLOW, LEFT MOTOR, pin2 to yellow
 static int dtPin1 = 5;  //DT to pin 5 WHITE, left motor
 static int clkPin2 = 3, dtPin2 = 6; //YELLOW to 3, RIGHT MOTOR,pin 6 to white
 
 volatile int aVal = 0, bVal = 0, TRAVEL1 = 0, TRAVEL2 = 0; //TRAVEL is position, mentioned in section 3.3, but not required for demonstration,travel one left, travel one right
 volatile float angleL = 0, angleR = 0;   
-int angle = -45;
+signed int angle = -45;
 #include <Wire.h>
 
 #define SLAVE_ADDRESS 0x04
-int pwm1 = 50, pwm2 = 50;
+int pwm1 = 50/2, pwm2 = 50;
 float currTime1 = 0, currTime2 = 0, prevTime1 = 0, prevTime2 = 0;
 int *addy;                
 void setup() {
@@ -84,7 +83,7 @@ void rotate(int angle, int* addy){
   float desired = full*angle/360;
   int target = abs((int)desired-(200*abs(angle)/90));
   TRAVEL1 = 0; TRAVEL2 = 0;
-
+  Serial.println(angle);
   if(angle < 0){
     digitalWrite(7, HIGH);
     digitalWrite(8, LOW);
@@ -143,15 +142,16 @@ void rotate(int angle, int* addy){
 
 void loop() {
   addy = &angle;
-  /*while(angle != 0){
-    rotate(angle);
+  while(abs(angle) >= 3){
+    rotate(angle, addy);
     delay(1000);
-  }*/
-  rotate(angle, addy);
-  while(1);
+    
+  }
+  
 }
 void receiveData(){
   while(Wire.available()){
-    angle = Wire.read();
+    angle = Wire.read()-27;
+  
   }
 }
