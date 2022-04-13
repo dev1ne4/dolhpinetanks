@@ -1,6 +1,6 @@
 Demo2 contains code for Demo 2.
 
-'_____.py' is pi code for camera and movement parameters
+'Demo2.py' is pi code for camera and movement parameters
 'demoTwoo.ino' is arduino code for robot forward/angular movement
 Connect Pi to Arduino via I2C, see Pi code for detail.
 Arduino setup requires Analog pins, but is otherwise identical to Demo 1.
