@@ -4,11 +4,11 @@ static int clkPin2 = 3, dtPin2 = 6; //YELLOW to 3, RIGHT MOTOR,pin 6 to white
 
 volatile int aVal = 0, bVal = 0, TRAVEL1 = 0, TRAVEL2 = 0; //TRAVEL is position, mentioned in section 3.3, but not required for demonstration,travel one left, travel one right
 volatile float angleL = 0, angleR = 0;   
-signed int angle = -45;
+signed int angle = -20;
 #include <Wire.h>
 
 #define SLAVE_ADDRESS 0x04
-int pwm1 = 50/2, pwm2 = 50;
+int pwm1 = 50, pwm2 = 50;
 float currTime1 = 0, currTime2 = 0, prevTime1 = 0, prevTime2 = 0;
 int *addy;                
 void setup() {
@@ -40,8 +40,14 @@ void setup() {
   Wire.begin(SLAVE_ADDRESS);
 
   Wire.onReceive(receiveData);
+  delay(5000);
   //Wire.onRequest(sendData);
-
+ //rotate(-45, addy); rotate(-30, addy); delay(2000); forward(4);
+ //for(int i = 0; i <3; i++){rotate(-45, addy); rotate(-30, addy);} forward(8);
+ //rotate(-45, addy); rotate(-30, addy); forward(8);
+ //for(int i = 0; i <3; i++){rotate(-45, addy); rotate(-30, addy);} forward(4);
+ //for(int i = 0; i <3; i++){rotate(-45, addy); rotate(-30, addy);} forward(8);
+  
 }
  
 void mechISR1(){ //clkPin ISR
@@ -78,19 +84,22 @@ void mechISR1(){ //clkPin ISR
 
 
 void rotate(int angle, int* addy){
-  
+
   double full = 5973.33;
   float desired = full*angle/360;
   int target = abs((int)desired-(200*abs(angle)/90));
   TRAVEL1 = 0; TRAVEL2 = 0;
   Serial.println(angle);
+  if(angle == 200){return;}
   if(angle < 0){
     digitalWrite(7, HIGH);
     digitalWrite(8, LOW);
     while(abs(TRAVEL2) < target || abs(TRAVEL1) < target){
-        if(angle != *addy){return;}
+      angle = *addy;
+        if(abs(angle) <= 5 || angle == 250){return;}
         if(abs(TRAVEL1) < target)analogWrite(9,pwm1);
         if(abs(TRAVEL2) < target)analogWrite(10,pwm2);
+      
       }
         analogWrite(9,0);
         analogWrite(10,0);
@@ -103,7 +112,8 @@ void rotate(int angle, int* addy){
     digitalWrite(8, HIGH);
 
     while(abs(TRAVEL2) < target +240|| abs(TRAVEL1) < target-250){
-        if(angle != *addy){return;}
+      angle = *addy;
+      if(abs(angle) <= 5|| angle == 250){return;}
         if(abs(TRAVEL1) < target -250)analogWrite(9,pwm1);
         if(abs(TRAVEL2) < target +240)analogWrite(10,pwm2);
       }
@@ -116,19 +126,30 @@ void rotate(int angle, int* addy){
   }
 
   void forward(float feet){
-     
+     TRAVEL1=0;
+     TRAVEL2=0;
+     pwm1=50;
+     pwm2=50;
+    digitalWrite(7, LOW); // left motor direction control, low meeans forward positive
+    digitalWrite(8, LOW);  // right motor direction control, low means forward positive
     while((TRAVEL1 < feet*2032) && (TRAVEL2 < feet*2032)) {
+        if(angle ==200){
+          return;}
         analogWrite(9,pwm1); analogWrite(10,pwm2);
-
+        
+      
      if(TRAVEL1 > TRAVEL2){
+      if(angle ==200){return;}
           while(TRAVEL1 > TRAVEL2) {
           ++pwm2;
-          analogWrite(9,0);
+          
           analogWrite(10,pwm2);
+          analogWrite(9,0);
           }                       
       }
       
       else if (TRAVEL1 < TRAVEL2){ 
+        if(angle ==250){return;}
         while(TRAVEL1 < TRAVEL2) {
         ++pwm1;
         analogWrite(9,pwm1);
@@ -141,17 +162,27 @@ void rotate(int angle, int* addy){
   }
 
 void loop() {
-  addy = &angle;
-  while(abs(angle) >= 3){
-    rotate(angle, addy);
-    delay(1000);
+  
+ addy = &angle;
+ 
+  analogWrite(9, 0); analogWrite(10,0);
+  
+  while(angle != 200){
     
+    delay(1000);
+    rotate(angle, addy);
+    while(abs(angle) <=5){
+     forward(0.25); 
+    
+    }
   }
+  
   
 }
 void receiveData(){
   while(Wire.available()){
-    angle = Wire.read()-27;
-  
+    angle = (Wire.read()-27);
+   
+   
   }
 }
